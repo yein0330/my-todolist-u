@@ -136,7 +136,9 @@ git config --list
 
 ## 9. 프로젝트 클론 (Windows 터미널에서)
 
-```bash
+```powershell
+mkdir C:\vibe
+cd C:\vibe
 git clone https://github.com/sujinchoi-u/my-todolist-u
 ```
 
