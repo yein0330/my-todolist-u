@@ -149,3 +149,28 @@ wsl          # Ubuntu 진입
 claude       # Claude 실행
 /usage       # 명령 실행해보기
 ```
+
+---
+
+## 11. DB 설치 (Ubuntu 터미널에서)
+
+```bash
+sudo apt install -y postgresql postgresql-contrib
+sudo service postgresql start
+sudo -u postgres psql -c "ALTER USER postgres PASSWORD 'post';"
+```
+
+### 설치 확인
+
+```bash
+node -v          # v18.x.x 이상
+npm -v           # 9.x.x 이상
+psql --version   # psql 17.x 이상
+```
+
+### DB 초기화
+
+```bash
+bash tododb-setup.sh
+# DB 비밀번호: post
+```
