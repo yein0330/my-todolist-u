@@ -62,7 +62,7 @@ winget install --id GitHub.cli
 
 ---
 
-## 7. AI Coding Agent 설치
+## 7. AI Coding Agent 설치 (Windows 터미널에서)
 
 ```bash
 # Claude Code
@@ -78,57 +78,12 @@ npm install -g @google/gemini-cli
 
 ---
 
-## 8. Docker 설치
-
-### 8.1 WSL 설치 (Windows 터미널에서)
-
-```powershell
-wsl --install
-```
-
-### 8.2 시스템 아키텍처 확인
-
-**설정 > 시스템 > 정보 > 시스템 종류** 확인:
-
-| 표시 내용 | 아키텍처 |
-|---|---|
-| 64비트 운영 체제, x64 기반 프로세서 | AMD64 (Intel/AMD CPU) |
-| 64비트 운영 체제, ARM 기반 프로세서 | ARM64 (스냅드래곤 등) |
-
-### 8.3 Docker Desktop 설치
-- [https://www.docker.com/products/docker-desktop/](https://www.docker.com/products/docker-desktop/) 에서 다운로드
-- 설치 옵션:
-  - **`Use WSL 2 instead of Hyper-V`**: 반드시 체크
-  - **`Allow Windows containers...`**: 체크하지 않음
-
-### 8.4 Ubuntu 설치 (Windows 터미널에서)
-
-```powershell
-node --version
-wsl --install -d Ubuntu
-# 계정: sogang / 비밀번호: root
-```
-
-### 8.5 Node.js 설치 (Ubuntu 터미널에서)
+## 8. AI Agent 실행 (Windows 터미널에서)
 
 ```bash
-node --version
-curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
-sudo apt-get install -y nodejs
-node --version
-```
-
-### 8.6 Git 설치 및 설정 (Ubuntu 터미널에서)
-
-```bash
-sudo apt-get update
-sudo apt-get install -y git
-git config --global user.name "sujinchoi-u"
-git config --global user.email "sujinchoi@u.sogang.ac.kr"
-git config --global init.defaultBranch main
-git config --global credential.helper store
-git config --global core.editor "notepad"
-git config --list
+claude    # Claude 실행
+gemini    # Gemini 실행
+qwen      # Qwen 실행
 ```
 
 ---
@@ -141,18 +96,39 @@ cd C:\vibe
 git clone https://github.com/sujinchoi-u/my-todolist-u
 ```
 
-## 10. Claude 실행 (Windows 터미널에서)
-
-```powershell
-cd C:\vibe\my-todolist-u
-claude
-```
-
-> Claude Code 실행 후 `/usage` 명령으로 사용량 확인 가능
-
 ---
 
-## 11. DB 설치 (Ubuntu 터미널에서)
+## 10. DB 설치 (PostgreSQL은 Ubuntu 위에서 실행, Ubuntu는 Docker/WSL 필요)
+
+### 10.1 WSL 설치 (Windows 터미널에서)
+
+```powershell
+wsl --install
+```
+
+### 10.2 시스템 아키텍처 확인
+
+**설정 > 시스템 > 정보 > 시스템 종류** 확인:
+
+| 표시 내용 | 아키텍처 |
+|---|---|
+| 64비트 운영 체제, x64 기반 프로세서 | AMD64 (Intel/AMD CPU) |
+| 64비트 운영 체제, ARM 기반 프로세서 | ARM64 (스냅드래곤 등) |
+
+### 10.3 Docker Desktop 설치
+- [https://www.docker.com/products/docker-desktop/](https://www.docker.com/products/docker-desktop/) 에서 다운로드
+- 설치 옵션:
+  - **`Use WSL 2 instead of Hyper-V`**: 반드시 체크
+  - **`Allow Windows containers...`**: 체크하지 않음
+
+### 10.4 Ubuntu 설치 (Windows 터미널에서)
+
+```powershell
+wsl --install -d Ubuntu
+# 계정: sogang / 비밀번호: root
+```
+
+### 10.5 PostgreSQL 설치 (Ubuntu 터미널에서)
 
 ```bash
 sudo apt install -y postgresql postgresql-contrib
@@ -168,14 +144,16 @@ npm -v           # 9.x.x 이상
 psql --version   # psql 17.x 이상
 ```
 
-### DB 초기화
+### 10.6 DB 초기화 및 테스트 데이터 생성
 
 ```bash
 bash tododb-setup.sh
 # DB 비밀번호: post
 ```
 
-### 설치 완료 후 실행 방법
+---
+
+## 11. 설치 완료 후 애플리케이션 실행 방법
 
 ```bash
 npm run dev
@@ -192,7 +170,7 @@ npm run dev
 
 ---
 
-## 12. Swagger Mock 서버 설정 및 사용법
+## 참고. Swagger Mock 서버 설정 및 사용법
 
 백엔드 구현 전에 프론트엔드를 개발하거나, API 명세(요청/응답 형식)를 미리 확인하기 위한 목서버입니다.
 실제 DB나 비즈니스 로직은 없으며, `swagger.json` 명세 기반으로 가짜 응답을 자동 생성합니다.
@@ -224,11 +202,3 @@ npm run dev:mock
 3. **Try it out** 버튼 클릭
 4. 파라미터 입력 후 **Execute** 클릭
 5. `swagger.json` 명세 기반으로 자동 생성된 가짜 응답 확인
-
-### 실제 백엔드 Swagger UI
-
-백엔드 실행(`npm run dev`) 후 아래 주소에서 실제 DB와 연동된 API 테스트 가능:
-
-```
-http://localhost:3000/api-docs
-```
