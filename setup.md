@@ -119,9 +119,22 @@ node --version
 sudo npm install -g @anthropic-ai/claude-code
 ```
 
+### 8.6 Git 설치 및 설정 (Ubuntu 터미널에서)
+
+```bash
+sudo apt-get update
+sudo apt-get install -y git
+git config --global user.name "sujinchoi-u"
+git config --global user.email "sujinchoi@u.sogang.ac.kr"
+git config --global init.defaultBranch main
+git config --global credential.helper store
+git config --global core.editor "notepad"
+git config --list
+```
+
 ---
 
-## 9. 프로젝트 클론 (VS Code 터미널에서)
+## 9. 프로젝트 클론 (Ubuntu 터미널에서)
 
 ```bash
 git clone https://github.com/sujinchoi-u/my-todolist-u
