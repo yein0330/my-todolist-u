@@ -25,6 +25,7 @@ export interface Todo {
   user_id: string;
   title: string;
   description: string | null;
+  start_date: string; // YYYY-MM-DD
   due_date: string; // YYYY-MM-DD
   status: 'pending' | 'completed';
   is_overdue?: boolean;

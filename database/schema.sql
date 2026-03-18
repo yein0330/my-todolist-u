@@ -75,7 +75,8 @@ CREATE TABLE todos (
     user_id     UUID         NOT NULL,                            -- FK → users.user_id (CASCADE)
     title       VARCHAR(255) NOT NULL,                            -- 할일 제목 (1~255자)
     description TEXT         DEFAULT NULL,                        -- 상세 설명 (선택, max 1000자)
-    due_date    DATE         NOT NULL,                            -- 마감일
+    start_date  DATE         NOT NULL,                            -- 시작일
+    due_date    DATE         NOT NULL,                            -- 마감일 (종료일)
     status      VARCHAR(20)  NOT NULL DEFAULT 'pending',          -- 상태: pending | completed
     created_at  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,  -- 생성 일시
     updated_at  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,  -- 수정 일시

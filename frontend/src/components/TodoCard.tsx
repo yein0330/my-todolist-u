@@ -37,7 +37,9 @@ export default function TodoCard({ todo, onToggle, onEdit, onDelete }: Props) {
           )}
         </div>
         <div className={styles.meta}>
-          <span className={styles.dueDate}>{todo.due_date}</span>
+          <span className={styles.dueDate}>
+            {todo.start_date} ~ {todo.due_date}
+          </span>
           <div className={styles.actions}>
             <button
               type="button"

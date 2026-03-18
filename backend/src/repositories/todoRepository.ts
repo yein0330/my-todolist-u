@@ -15,13 +15,14 @@ export async function insertTodo(
   user_id: string,
   title: string,
   description: string | null,
+  start_date: string,
   due_date: string
 ): Promise<TodoRow> {
   const result = await queryOne<TodoRow>(
-    `INSERT INTO todos (todo_id, user_id, title, description, due_date, status)
-     VALUES ($1, $2, $3, $4, $5, 'pending')
-     RETURNING todo_id, user_id, title, description, due_date::text AS due_date, status, created_at, updated_at`,
-    [todo_id, user_id, title, description, due_date]
+    `INSERT INTO todos (todo_id, user_id, title, description, start_date, due_date, status)
+     VALUES ($1, $2, $3, $4, $5, $6, 'pending')
+     RETURNING todo_id, user_id, title, description, start_date::text AS start_date, due_date::text AS due_date, status, created_at, updated_at`,
+    [todo_id, user_id, title, description, start_date, due_date]
   );
   return result!;
 }
@@ -50,7 +51,7 @@ export async function findTodosByUserId(
   const orderClause = SORT_MAP[sort] ?? SORT_MAP.due_date_asc;
 
   const result = await query<TodoRow>(
-    `SELECT todo_id, user_id, title, description, due_date::text AS due_date, status, created_at, updated_at
+    `SELECT todo_id, user_id, title, description, start_date::text AS start_date, due_date::text AS due_date, status, created_at, updated_at
      FROM todos
      WHERE ${whereClause}
      ORDER BY ${orderClause}`,
@@ -61,7 +62,7 @@ export async function findTodosByUserId(
 
 export async function findTodoById(todo_id: string): Promise<TodoRow | null> {
   return queryOne<TodoRow>(
-    `SELECT todo_id, user_id, title, description, due_date::text AS due_date, status, created_at, updated_at
+    `SELECT todo_id, user_id, title, description, start_date::text AS start_date, due_date::text AS due_date, status, created_at, updated_at
      FROM todos
      WHERE todo_id = $1`,
     [todo_id]
@@ -72,15 +73,16 @@ export async function updateTodo(
   todo_id: string,
   title: string,
   description: string | null,
+  start_date: string,
   due_date: string,
   status: 'pending' | 'completed'
 ): Promise<TodoRow | null> {
   return queryOne<TodoRow>(
     `UPDATE todos
-     SET title = $2, description = $3, due_date = $4, status = $5, updated_at = NOW()
+     SET title = $2, description = $3, start_date = $4, due_date = $5, status = $6, updated_at = NOW()
      WHERE todo_id = $1
-     RETURNING todo_id, user_id, title, description, due_date::text AS due_date, status, created_at, updated_at`,
-    [todo_id, title, description, due_date, status]
+     RETURNING todo_id, user_id, title, description, start_date::text AS start_date, due_date::text AS due_date, status, created_at, updated_at`,
+    [todo_id, title, description, start_date, due_date, status]
   );
 }
 
@@ -92,7 +94,7 @@ export async function updateTodoStatus(
     `UPDATE todos
      SET status = $2, updated_at = NOW()
      WHERE todo_id = $1
-     RETURNING todo_id, user_id, title, description, due_date::text AS due_date, status, created_at, updated_at`,
+     RETURNING todo_id, user_id, title, description, start_date::text AS start_date, due_date::text AS due_date, status, created_at, updated_at`,
     [todo_id, status]
   );
 }

@@ -59,7 +59,7 @@ export default function HomePage() {
     navigate('/login', { replace: true })
   }
 
-  async function handleCreate(values: { title: string; description: string; due_date: string }) {
+  async function handleCreate(values: { title: string; description: string; start_date: string; due_date: string }) {
     await apiClient.post('/todos', values)
     setCreateModalOpen(false)
     fetchTodos()
@@ -74,7 +74,7 @@ export default function HomePage() {
     }
   }
 
-  async function handleEdit(values: { title: string; description: string; due_date: string }) {
+  async function handleEdit(values: { title: string; description: string; start_date: string; due_date: string }) {
     if (!editTodo) return
     await apiClient.put(`/todos/${editTodo.todo_id}`, values)
     setEditTodo(null)
@@ -294,6 +294,7 @@ export default function HomePage() {
             ? {
                 title: editTodo.title,
                 description: editTodo.description ?? '',
+                start_date: editTodo.start_date,
                 due_date: editTodo.due_date,
               }
             : null

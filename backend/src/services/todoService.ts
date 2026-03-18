@@ -15,10 +15,11 @@ export async function createTodo(
   user_id: string,
   title: string,
   description: string | null,
+  start_date: string,
   due_date: string
 ): Promise<Todo> {
   const todo_id = uuidv4();
-  const row = await insertTodo(todo_id, user_id, title, description, due_date);
+  const row = await insertTodo(todo_id, user_id, title, description, start_date, due_date);
   return {
     ...row,
     is_overdue: calcIsOverdue(row.due_date, row.status),
@@ -66,6 +67,7 @@ export async function updateTodo(
   user_id: string,
   title: string,
   description: string | null,
+  start_date: string,
   due_date: string,
   status?: 'pending' | 'completed'
 ): Promise<Todo> {
@@ -79,7 +81,7 @@ export async function updateTodo(
   }
 
   const resolvedStatus = status ?? existing.status;
-  const updated = await repoUpdateTodo(todo_id, title, description, due_date, resolvedStatus);
+  const updated = await repoUpdateTodo(todo_id, title, description, start_date, due_date, resolvedStatus);
 
   return {
     ...updated!,

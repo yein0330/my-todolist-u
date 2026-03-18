@@ -5,6 +5,7 @@ import styles from './TodoFormModal.module.css'
 interface FormValues {
   title: string
   description: string
+  start_date: string
   due_date: string
 }
 
@@ -20,8 +21,10 @@ export default function TodoFormModal({ isOpen, mode, initialValues, onSubmit, o
   const { t } = useI18n()
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
+  const [startDate, setStartDate] = useState('')
   const [dueDate, setDueDate] = useState('')
   const [titleError, setTitleError] = useState('')
+  const [startDateError, setStartDateError] = useState('')
   const [dueDateError, setDueDateError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -29,8 +32,10 @@ export default function TodoFormModal({ isOpen, mode, initialValues, onSubmit, o
     if (isOpen) {
       setTitle(initialValues?.title ?? '')
       setDescription(initialValues?.description ?? '')
+      setStartDate(initialValues?.start_date ?? '')
       setDueDate(initialValues?.due_date ?? '')
       setTitleError('')
+      setStartDateError('')
       setDueDateError('')
     }
   }, [isOpen, initialValues])
@@ -41,16 +46,23 @@ export default function TodoFormModal({ isOpen, mode, initialValues, onSubmit, o
     e.preventDefault()
 
     const titleErr = title.trim() ? '' : t('titleRequired')
+    const startDateErr = startDate ? '' : t('startDateRequired')
     const dueDateErr = dueDate ? '' : t('dueDateRequired')
+    let dateRangeErr = ''
+    
+    if (startDate && dueDate && startDate > dueDate) {
+      dateRangeErr = t('startDateAfterDueDate')
+    }
 
     setTitleError(titleErr)
+    setStartDateError(startDateErr || dateRangeErr)
     setDueDateError(dueDateErr)
 
-    if (titleErr || dueDateErr) return
+    if (titleErr || startDateErr || dueDateErr || dateRangeErr) return
 
     setIsSubmitting(true)
     try {
-      await onSubmit({ title: title.trim(), description, due_date: dueDate })
+      await onSubmit({ title: title.trim(), description, start_date: startDate, due_date: dueDate })
     } finally {
       setIsSubmitting(false)
     }
@@ -109,6 +121,22 @@ export default function TodoFormModal({ isOpen, mode, initialValues, onSubmit, o
                 maxLength={1000}
                 rows={3}
               />
+            </div>
+
+            <div className={styles.field}>
+              <label htmlFor="todo-start-date" className={styles.label}>{t('todoStartDateLabel')}</label>
+              <input
+                id="todo-start-date"
+                type="date"
+                className={`${styles.input}${startDateError ? ` ${styles.inputError}` : ''}`}
+                value={startDate}
+                onChange={(e) => {
+                  setStartDate(e.target.value)
+                  if (startDateError && e.target.value) setStartDateError('')
+                }}
+                disabled={isSubmitting}
+              />
+              {startDateError && <span className={styles.fieldError}>{startDateError}</span>}
             </div>
 
             <div className={styles.field}>

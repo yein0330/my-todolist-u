@@ -13,9 +13,9 @@ const VALID_SORTS: SortOption[] = [
 
 export async function createTodoController(req: Request, res: Response): Promise<void> {
   const user_id = req.user!.user_id;
-  const { title, description, due_date } = req.body;
+  const { title, description, start_date, due_date } = req.body;
 
-  const errors = validateCreateTodo(title, due_date, description);
+  const errors = validateCreateTodo(title, start_date, due_date, description);
   if (errors.length > 0) {
     res.status(400).json({
       status: 'error',
@@ -31,6 +31,7 @@ export async function createTodoController(req: Request, res: Response): Promise
       user_id,
       title as string,
       description ?? null,
+      start_date as string,
       due_date as string
     );
     res.status(201).json(todo);
@@ -92,9 +93,9 @@ export async function getTodoByIdController(req: Request, res: Response): Promis
 export async function updateTodoController(req: Request, res: Response): Promise<void> {
   const user_id = req.user!.user_id;
   const todo_id = req.params.id as string;
-  const { title, description, due_date, status } = req.body;
+  const { title, description, start_date, due_date, status } = req.body;
 
-  const errors = validateUpdateTodo(title, due_date, description, status);
+  const errors = validateUpdateTodo(title, start_date, due_date, description, status);
   if (errors.length > 0) {
     res.status(400).json({
       status: 'error',
@@ -111,6 +112,7 @@ export async function updateTodoController(req: Request, res: Response): Promise
       user_id,
       title as string,
       description !== undefined ? (description as string | null) : null,
+      start_date as string,
       due_date as string,
       status as 'pending' | 'completed' | undefined
     );

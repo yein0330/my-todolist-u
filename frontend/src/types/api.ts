@@ -33,6 +33,7 @@ export interface Todo {
   user_id: string
   title: string
   description: string | null
+  start_date: string
   due_date: string
   status: TodoStatus
   is_overdue: boolean

@@ -56,6 +56,7 @@ const DATE_REGEX = /^\d{4}-\d{2}-\d{2}$/;
 
 export function validateCreateTodo(
   title: unknown,
+  start_date: unknown,
   due_date: unknown,
   description?: unknown
 ): ValidationError[] {
@@ -67,13 +68,26 @@ export function validateCreateTodo(
     errors.push({ field: 'title', message: '제목은 1자 이상 255자 이하이어야 합니다.' });
   }
 
-  if (typeof due_date !== 'string' || !DATE_REGEX.test(due_date)) {
-    errors.push({ field: 'due_date', message: '마감일은 YYYY-MM-DD 형식이어야 합니다.' });
-  } else {
-    const [year, month, day] = due_date.split('-').map(Number);
+  const checkDate = (date: unknown, field: string, label: string) => {
+    if (typeof date !== 'string' || !DATE_REGEX.test(date)) {
+      errors.push({ field, message: `${label}은 YYYY-MM-DD 형식이어야 합니다.` });
+      return false;
+    }
+    const [year, month, day] = date.split('-').map(Number);
     const d = new Date(Date.UTC(year, month - 1, day));
     if (d.getUTCFullYear() !== year || d.getUTCMonth() + 1 !== month || d.getUTCDate() !== day) {
-      errors.push({ field: 'due_date', message: '마감일은 YYYY-MM-DD 형식이어야 합니다.' });
+      errors.push({ field, message: `${label}은 YYYY-MM-DD 형식이어야 합니다.` });
+      return false;
+    }
+    return true;
+  };
+
+  const isStartValid = checkDate(start_date, 'start_date', '시작일');
+  const isDueValid = checkDate(due_date, 'due_date', '마감일');
+
+  if (isStartValid && isDueValid) {
+    if (start_date! > due_date!) {
+      errors.push({ field: 'start_date', message: '시작일은 마감일보다 늦을 수 없습니다.' });
     }
   }
 
@@ -88,11 +102,12 @@ export function validateCreateTodo(
 
 export function validateUpdateTodo(
   title: unknown,
+  start_date: unknown,
   due_date: unknown,
   description?: unknown,
   status?: unknown
 ): ValidationError[] {
-  const errors = validateCreateTodo(title, due_date, description);
+  const errors = validateCreateTodo(title, start_date, due_date, description);
 
   if (status !== undefined && status !== 'pending' && status !== 'completed') {
     errors.push({
