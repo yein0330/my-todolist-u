@@ -93,7 +93,7 @@ qwen      # Qwen 실행
 ```powershell
 mkdir C:\vibe
 cd C:\vibe
-git clone [https://github.com/yein0330/my-todolist-u]
+git clone https://github.com/yein0330/my-todolist-u
 ```
 
 ---
